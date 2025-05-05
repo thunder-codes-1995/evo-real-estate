@@ -1,0 +1,16 @@
+fastapi
+boto3
+python-multipart
+pytest-shutil
+python-environ
+elasticsearch
+email-validator
+firebase-admin
+pydantic-settings
+uvicorn
+python-requirements
+motor
+websockets
+phonenumbers
+httpx
+python-socketio

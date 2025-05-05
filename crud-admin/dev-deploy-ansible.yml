@@ -1,0 +1,34 @@
+---
+- name: Deploy crud-admin to dev
+  hosts: web
+  become: true
+  gather_facts: true
+
+  tasks:
+  - name: Copy build data using the copy module
+    copy:
+      src: ./crud-admin/* 
+      dest: /var/www/html/crud-admin/   
+
+  - name: Ensure Python virtualenv package is installed
+    package:
+      name: python3-virtualenv
+      state: present
+
+  - name: Create a virtual environment if not present
+    command: "python3 -m virtualenv /data/crudadmin"
+    args:
+      creates: "/data/crudadmin/bin/activate"
+
+  - name: Activate the virtual environment
+    command: "source /data/crudadmin/bin/activate"
+    args:
+      executable: /bin/bash
+    environment:
+      VIRTUAL_ENV: /data/crudadmin
+      PATH: "{{ ansible_env.PATH }}:/data/crudadmin/bin"
+
+  - name: Install Python packages using pip3 from requirements.txt
+    pip:
+      requirements: /var/www/html/crud-admin/requirements.txt
+      executable: /var/www/html/crud-admin
